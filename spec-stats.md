@@ -2,9 +2,9 @@
 
 We would like to add a right click menu item in the GUI of Spectra that prints to the console some statistics on the specification, such as the number of assumtions/guarantees by kind, and the node count of the BDD represantation of the initial and transition formulas of the system and the environment.
 
-1. First, create a separate git branch from master, by running `git checkout -b [YOUR_NAME]-tutorial-spec-stats origin/master`.
+1. Create a separate git branch in `spectra-synt`, tracking master, by running `git checkout -b [YOUR_NAME]-tutorial-spec-stats origin/master`.
 2. Create a Java class called `StatsJob` under tau.smlab.syntech.ui.jobs package in tau.smlab.syntech.ui project.
-3. Paste the following content for the class:
+3. Paste the following content into the class:
    ```java
    public class StatsJob extends SyntechJob {
 
@@ -46,14 +46,15 @@ We would like to add a right click menu item in the GUI of Spectra that prints t
      }
    }
    ```
-4. Open the `SynthesisAction` class. This class contains a switch case for all the different jobs that you can execute within the GUI of Spectra. Add a new case as follows:
+4. Add additional information to be printed to the console as you wish. You can look at the `model` object, which is of type `GameModel`. This object contains all the constraints that were 	defined in the specification, as BDD objects.
+5. Open the `SynthesisAction` class. This class contains a switch case for all the different jobs that you can execute within the GUI of Spectra. Add a new case as follows:
    ```java
    		case "tau.smlab.syntech.statsAction":
 			  job = new StatsJob();
 			  job.setTrace(TraceInfo.ALL);
 			  break;
    ```
-5. Open the `plugin.xml` configuration file. This is an XML file that contains meta data on all the jobs, and how they are displayed inside a right click menu. Add the following XML content:
+6. Open the `plugin.xml` configuration file. This is an XML file that contains meta data on all the jobs, and how they are displayed inside a right click menu. Add the following XML content:
    ```xml
       <action
         id="tau.smlab.syntech.statsAction" 
@@ -64,5 +65,5 @@ We would like to add a right click menu item in the GUI of Spectra that prints t
       </action>
    ```
    You can add this XML in the editor view section, in the explorer view section, or both.
-6. Compile everything and open the development Eclipse application.
-7. Right click on a specification file, choose "Specification Statistics" and look at the output in the console.
+7. Compile everything and open the development Eclipse application.
+8. Right click on a specification file, choose "Specification Statistics" and look at the output in the console.
