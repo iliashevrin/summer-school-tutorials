@@ -25,8 +25,8 @@ We would like to enrich the Spectra specification language with a construct of i
 	 | pointer=[Referrable] operator='.min'
 	 | pointer=[Referrable] operator='.max');
    ```
-4. Rebuild the abstract syntax tree by right clicking on the `Spectra.xtext` file, "Run As", and "Generate Xtext Artifacts".
-5. Open the `TemporalPrimaryExpression` class, which is part of the auto-generated AST, and ensure that you have the new getters and setters for `ifPart`, `thenPart`, and `elsePart`.
+4. Regenerate the Xtext artifacts (the abstract syntax tree objects) by right clicking on the `Spectra.xtext` file, "Run As", and "Generate Xtext Artifacts".
+5. Open the `TemporalPrimaryExpression` class, which is part of the auto-generated artifacts, and ensure that you see the new getters and setters for `ifPart`, `thenPart`, and `elsePart`.
 6. Create a Java class called `IfThenElseInstance` under tau.smlab.syntech.gameinput.spec package in tau.smlab.syntech.gameinput project.
 7. Paste the following content into the class:
    ```java
@@ -98,7 +98,7 @@ We would like to enrich the Spectra specification language with a construct of i
     	}
    }
    ```
-8. Open the `SpectraASTToSpecGenerator` class. This class contains code that creates a `SpecWrapper` object out of the auto-generated AST objects. This class wraps a `Spec` object, which is later translated to a BDD. Add the following code to the `getConstraintSpec` method in line 399 (note that there are many overloads of this method in the class):
+8. Open the `SpectraASTToSpecGenerator` class. This class contains code that creates a `SpecWrapper` object from the auto-generated artifacts. This class wraps a `Spec` object, which is later translated to a BDD. Add the following code to the `getConstraintSpec` method in line 399 (note that there are many overloads of this method in the class):
    ```java
    if (temporalPrimaryExpr.getIfPart() != null) {
 			
@@ -126,14 +126,6 @@ We would like to enrich the Spectra specification language with a construct of i
     
     		for (Constraint c : input.getAux().getConstraints()) {
     			c.setSpec(replaceIfThenElseInstances(c.getSpec()));
-    		}
-    
-    		for (Define def : input.getDefines()) {
-    			if (def.getExpression() != null) {
-    				def.setExpression(replaceIfThenElseInstances(def.getExpression()));
-    			} else {
-    				def.setDefineArray(replaceIfThenElseInDefineArrays(def.getDefineArray()));
-    			}
     		}
     	}
     
