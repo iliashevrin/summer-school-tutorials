@@ -46,7 +46,7 @@ We would like to add a right click menu item in the GUI of Spectra that prints t
      }
    }
    ```
-4. Add additional information to be printed to the console as you wish. You can look at the `model` object, which is of type `GameModel`. This object contains all the constraints that were 	defined in the specification, as BDD objects.
+4. Add additional information to be printed to the console as you wish. You can look at the `model` object, which is of type `GameModel`. This object contains all the constraints that were 	defined in the specification, as BDD objects. This `model` object is initialized already in the `SynthesisAction` class.
 5. Open the `SynthesisAction` class. This class contains a switch case for all the different jobs that you can execute within the GUI of Spectra. Add a new case as follows:
    ```java
    		case "tau.smlab.syntech.statsAction":
