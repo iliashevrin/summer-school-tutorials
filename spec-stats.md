@@ -54,7 +54,7 @@ We would like to add a right click menu item in the GUI of Spectra that prints t
 			  job.setTrace(TraceInfo.ALL);
 			  break;
    ```
-6. Open the `plugin.xml` configuration file. This is an XML file that contains meta data on all the jobs, and how they are displayed inside a right click menu. Add the following XML content:
+6. Open the `plugin.xml` configuration file. This is an XML file that contains meta data on all the jobs, and how they are displayed inside a right click menu. Add the following XML content in the editor view section, in the explorer view section, or both:
    ```xml
       <action
         id="tau.smlab.syntech.statsAction" 
@@ -64,6 +64,5 @@ We would like to add a right click menu item in the GUI of Spectra that prints t
         class="tau.smlab.syntech.ui.action.SynthesisAction"> 
       </action>
    ```
-   You can add this XML in the editor view section, in the explorer view section, or both.
 7. Compile everything and open the development Eclipse application.
 8. Right click on a specification file, choose "Specification Statistics" and look at the output in the console.
