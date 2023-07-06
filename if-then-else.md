@@ -154,10 +154,12 @@ We would like to enrich the Spectra specification language with a construct of i
     	}
     }
     ```
-11. Open the `DefaultTranslators` class. In this class, all the translators register themselves to the translator list. Add the following line in line 43 (the order in which the translators execute matters):
+    For simplicity, we skip translation for advanced Spectra constructs such as counters, monitors, patterns, and so on.
+11. Open the `DefaultTranslators` class. In this class, all the translators register themselves to the translator list. Add the following line in line 43:
     ```java
     ts.add(new IfThenElseInstanceTranslator());
     ```
+    Note that the order in which the translators execute matters.
 12. Compile everything and open the development Eclipse application.
 13. Add the following Spectra specification to the project:
     ```
