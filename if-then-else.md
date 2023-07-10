@@ -2,9 +2,10 @@
 
 We would like to enrich the Spectra specification language with a construct of if-then-else that takes three Boolean formulas a,b,c as parameters, and defines a formula that semantically represents "if a then b, else c".
 
+0. Make sure that you have `spectra-synt` repository projects imported into your Eclipse workspace.
 1. Create a separate git branch in `spectra-synt`, tracking master, by running `git checkout -b [YOUR_NAME]-tutorial-if-then-else origin/master` in the `spectra-synt` directory.
 2. Create a separate git branch in `spectra-lang`, tracking master, by running `git checkout -b [YOUR_NAME]-tutorial-if-then-else origin/master` in the `spectra-lang` directory.
-3. Open the `Spectra.xtext` file, which defines the grammar of the Spectra specification language, and add the line with `ite` to the `TemporalPrimaryExpression` rule:
+3. Open the `Spectra.xtext` file under tau.smlab.syntech package in tau.smlab.syntech.Spectra project. This file defines the grammar of the Spectra specification language. Add the line with `ite` to the `TemporalPrimaryExpression` rule:
    ```abnf
    TemporalPrimaryExpr returns TemporalExpression:
 	Constant
@@ -26,13 +27,15 @@ We would like to enrich the Spectra specification language with a construct of i
 	 | pointer=[Referrable] operator='.max');
    ```
 4. Regenerate the Xtext artifacts (the abstract syntax tree objects) by right clicking on the `Spectra.xtext` file, "Run As", and "Generate Xtext Artifacts".
-5. Open the `TemporalPrimaryExpression` class, which is part of the auto-generated artifacts, and ensure that you see the new getters and setters for `ifPart`, `thenPart`, and `elsePart`.
+5. Open the `TemporalPrimaryExpression` class under tau.smlab.syntech.spectra package, in src-gen folder, in tau.smlab.syntech.Spectra project. This file is part of the auto-generated artifacts. You can look for the class by doing Ctrl+Shift+R. Ensure that you see the new getters and setters for `ifPart`, `thenPart`, and `elsePart`.
 6. Create a Java class called `IfThenElseInstance` under tau.smlab.syntech.gameinput.spec package in tau.smlab.syntech.gameinput project.
 7. Paste the following content into the class:
    ```java
+   package tau.smlab.syntech.gameinput.spec;
+   
    public class IfThenElseInstance implements Spec {
   
-  	  private static final long serialVersionUID = 165285782221463029L;
+  	private static final long serialVersionUID = 165285782221463029L;
   	
     	private Spec ifPart;
     	private Spec thenPart;
@@ -98,7 +101,7 @@ We would like to enrich the Spectra specification language with a construct of i
     	}
    }
    ```
-8. Open the `SpectraASTToSpecGenerator` class. This class contains code that creates a `SpecWrapper` object from the auto-generated artifacts. This class wraps a `Spec` object, which is later translated to a BDD. Add the following code to the `getConstraintSpec` method in line 399 (note that there are many overloads of this method in the class):
+8. Open the `SpectraASTToSpecGenerator` class under tau.smlab.syntech.spectragameinput.translator package in tau.smlab.syntech.spectragameinput project. This class contains code that creates a `SpecWrapper` object from the auto-generated artifacts. This class wraps a `Spec` object, which is later translated to a BDD. Add the following code to the `getConstraintSpec` method in line 399 (note that there are many overloads of this method in the class):
    ```java
    if (temporalPrimaryExpr.getIfPart() != null) {
 			
@@ -108,9 +111,22 @@ We would like to enrich the Spectra specification language with a construct of i
 				getConstraintSpec(temporalPrimaryExpr.getElsePart(), entitiesMapper, tracer, predicateParamsList, patternVarsAndParams, constraintParamsValues).getSpec()));
 		}
    ```
+   Don't forget to put at the top `import tau.smlab.syntech.gameinput.spec.IfThenElseInstance;`
 9. Create a Java class called `IfThenElseInstanceTranslator` under tau.smlab.syntech.gameinputtrans.translator package in tau.smlab.syntech.gameinputtrans project. This class translates the `IfThenElseInstance` to a simple `Spec` instance without any additional language constructs, just plain Boolean operators.
 10. Paste the following content into the class:
     ```java
+    package tau.smlab.syntech.gameinputtrans.translator;
+
+    	import java.util.ArrayList;
+	import java.util.List;
+	
+	import tau.smlab.syntech.gameinput.model.Constraint;
+	import tau.smlab.syntech.gameinput.model.GameInput;
+	import tau.smlab.syntech.gameinput.spec.IfThenElseInstance;
+	import tau.smlab.syntech.gameinput.spec.Operator;
+	import tau.smlab.syntech.gameinput.spec.Spec;
+	import tau.smlab.syntech.gameinput.spec.SpecExp;
+
     public class IfThenElseInstanceTranslator implements Translator {
 
     	@Override
@@ -155,12 +171,12 @@ We would like to enrich the Spectra specification language with a construct of i
     }
     ```
     For simplicity, we skip translation for advanced Spectra constructs such as counters, monitors, patterns, and so on.
-11. Open the `DefaultTranslators` class. In this class, all the translators register themselves to the translator list. Add the following line in line 43:
+11. Open the `DefaultTranslators` class under tau.smlab.syntech.gameinputtrans.translator package in tau.smlab.syntech.gameinputtrans project. In this class, all the translators register themselves to the translator list. Add the following line in line 43:
     ```java
     ts.add(new IfThenElseInstanceTranslator());
     ```
     Note that the order in which the translators execute matters.
-12. Compile everything and open the development Eclipse application.
+12. Compile everything and open the development Eclipse application, by doing "Run As" -> "Eclipse Application".
 13. Add the following Spectra specification to the project:
     ```
     module IfThenElseTest
